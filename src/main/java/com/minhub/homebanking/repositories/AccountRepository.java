@@ -1,12 +1,12 @@
 package com.minhub.homebanking.repositories;
 
-import com.minhub.homebanking.models.Client;
+import com.minhub.homebanking.models.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
 
 @RepositoryRestResource
-public interface ClientRepository extends JpaRepository<Client, Long> {
-    List<Client> findByLastName(String lastName);
+public interface AccountRepository extends JpaRepository<Account,Long>{
 }
+
+
