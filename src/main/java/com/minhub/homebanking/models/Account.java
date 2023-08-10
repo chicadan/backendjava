@@ -4,6 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account {
@@ -21,6 +23,7 @@ public class Account {
     @JoinColumn(name ="client_id")
     private Client client;
 
+
     public Account(String number, LocalDate creationDate, double balance, Client client) {
         this.id = getId();
         this.number = number;
@@ -28,6 +31,9 @@ public class Account {
         this.balance = balance;
         this.client = client;
         }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Transaction> transactions = new HashSet<>();
 
     public Account() {
 
@@ -64,5 +70,11 @@ public class Account {
     }
     public void setClient(Client client) {
         this.client = client;
+    }
+
+
+    public void addTransaction (Transaction transaction) {
+        transactions.add(transaction);
+        transaction.setAccount(this);
     }
 }

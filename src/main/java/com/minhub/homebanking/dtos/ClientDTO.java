@@ -1,6 +1,5 @@
 package com.minhub.homebanking.dtos;
 
-import com.minhub.homebanking.models.Account;
 import com.minhub.homebanking.models.Client;
 
 import java.util.Set;
@@ -14,7 +13,6 @@ public class ClientDTO extends Client {
 
     public ClientDTO(Client client){
 
-
         id = client.getId();
 
         firstName = client.getFirstName();
@@ -23,7 +21,7 @@ public class ClientDTO extends Client {
 
         email = client.getEmail();
 
-        accounts = client.getAccounts().stream().map(element -> new AccountDTO(element)).collect(Collectors.toSet());
+        accounts = client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toSet());
 
 
     }
@@ -42,8 +40,11 @@ public class ClientDTO extends Client {
         return email;
     }
 
-    public Set<AccountDTO> getAccount() {
+
+    public Set<AccountDTO> getaccounts() {
         return accounts;
     }
+
+
 }
 
