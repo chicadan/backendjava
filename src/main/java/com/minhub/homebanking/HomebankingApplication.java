@@ -3,8 +3,11 @@ package com.minhub.homebanking;
 
 import com.minhub.homebanking.models.Account;
 import com.minhub.homebanking.models.Client;
+
 import com.minhub.homebanking.models.Transaction;
 import com.minhub.homebanking.models.TransactionType;
+
+
 import com.minhub.homebanking.repositories.AccountRepository;
 import com.minhub.homebanking.repositories.ClientRepository;
 import com.minhub.homebanking.repositories.TransactionRepository;
@@ -15,7 +18,9 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
+
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -36,27 +41,17 @@ public class HomebankingApplication {
             clientRepository.save(client2);
 
             //CREATE ACCOUNT
+            Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
+            Account account2 = new Account("VIN002",LocalDate.now().plusDays(1), 7500.0);
+            Account account3 = new Account("VIN003",LocalDate.now(), 2000.0);
+            Account account4 = new Account("VIN004", LocalDate.now().plusDays(2), 10000.0);
 
-            Account account1 = new Account("VIN001", LocalDate.now(), 5000.0,client1);
-            account1.setClient(client1);
-
-            Account account2 = new Account("VIN002",LocalDate.now().plusDays(1), 7500.0, client1);
-            account2.setClient(client1);
-
-            Account account3 = new Account("VIN003",LocalDate.now(), 2000.0, client2);
-            account3.setNumber("VIN003");
-
-            Account account4 = new Account("VIN004", LocalDate.now().plusDays(2), 10000.0, client2);
-            account4.setNumber("VIN004");
 
 
             //ADD ACCOUNT TO CLIENT
             client1.addAccount(account1);
-
             client1.addAccount(account2);
-
             client2.addAccount(account3);
-
             client2.addAccount(account4);
 
             //SAVE BBDD
@@ -89,6 +84,14 @@ public class HomebankingApplication {
             accountRepository.save(account1);
             accountRepository.save(account2);
 
+
+
+
+            //SAVE
+
+
+            clientRepository.save(client1);
+            clientRepository.save(client2);
         };
     }
 };
