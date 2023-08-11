@@ -15,17 +15,10 @@ public class ClientDTO {
 
     public ClientDTO(Client client){
 
-
-
         this.id = client.getId();
-
         this.firstName = client.getFirstName();
-
         this.lastName = client.getLastName();
-
         this.email = client.getEmail();
-
-
         this.accounts = client.getAccounts().stream().map(element -> new AccountDTO(element)).collect(Collectors.toSet());
 
 

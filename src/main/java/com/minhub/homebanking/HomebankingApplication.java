@@ -63,10 +63,10 @@ public class HomebankingApplication {
 
 
             //CREATE TRANSACTIONS
-            Transaction transaction1 = new Transaction(LocalDateTime.now(), 1000.0, account1, TransactionType.CREDIT);
-            Transaction transaction2 = new Transaction(LocalDateTime.now(), -500.0, account1, TransactionType.DEBIT);
-            Transaction transaction3 = new Transaction(LocalDateTime.now(), 2000.0, account2, TransactionType.CREDIT);
-            Transaction transaction4 = new Transaction(LocalDateTime.now(), -1000.0, account2, TransactionType.DEBIT);
+            Transaction transaction1 = new Transaction(TransactionType.CREDIT, 1000.0, "Transference", LocalDateTime.now());
+            Transaction transaction2 = new Transaction(TransactionType.DEBIT, -500.0, "Transference", LocalDateTime.now());
+            Transaction transaction3 = new Transaction(TransactionType.CREDIT, 2000.0, "Transference", LocalDateTime.now());
+            Transaction transaction4 = new Transaction(TransactionType.DEBIT, -1000.0, "Transference", LocalDateTime.now());
 
             // SAVE TRANSACTIONS
             transactionRepository.save(transaction1);
@@ -87,9 +87,7 @@ public class HomebankingApplication {
 
 
 
-            //SAVE
-
-
+            //UPDATE CLIENT
             clientRepository.save(client1);
             clientRepository.save(client2);
         };

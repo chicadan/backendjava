@@ -1,5 +1,6 @@
 package com.minhub.homebanking.models;
 
+import jdk.jfr.Description;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,68 +13,31 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private LocalDateTime transactionDate;
-
-    private Double amount;
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+    private Double amount;
+
+    private String text;
+    private LocalDateTime transactionDate;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Transaction() {
-        // Constructor vacío para JPA
-    }
-
-    public Transaction(LocalDateTime transactionDate, Double amount, Account account, TransactionType Type) {
-        this.transactionDate = transactionDate;
-        this.amount = amount;
-        this.account = account;
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(LocalDateTime transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
+    public Transaction(){
     }
 
 
-    public TransactionType getType() {
-        return type;
-    }
-
-    public void setType(TransactionType type) {
+    public Transaction(TransactionType type, Double amount, String text, LocalDateTime transactionDate, Account account) {
         this.type = type;
+        this.amount = amount;
+        this.text = text;
+        this.transactionDate = transactionDate;
     }
 }
+
+
 
 
