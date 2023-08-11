@@ -33,16 +33,10 @@ public class HomebankingApplication {
 
             //CREAR CUENTA
 
-            Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
-
-
+            Account account1 = new Account("VIN001",LocalDate.now(), 5000.0);
             Account account2 = new Account("VIN002",LocalDate.now().plusDays(1), 7500.0);
-
-
             Account account3 = new Account("VIN003",LocalDate.now(), 2000.0);
-
-
-            Account account4 = new Account("VIN004", LocalDate.now().plusDays(2), 10000.0);
+            Account account4 = new Account("VIN004",LocalDate.now().plusDays(2), 10000.0);
 
 
 
@@ -53,7 +47,7 @@ public class HomebankingApplication {
 
             client2.addAccount(account3);
 
-            client1.addAccount(account4);
+            client2.addAccount(account4);
 
 
 

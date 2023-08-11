@@ -79,7 +79,7 @@
                             <h2 class="display-6 subtitle">Accounts</h2>
                         </div>
                         <div class="row mx-2">
-                            <div v-for="{id, number, creationDate, balance} in clientInfo.accounts"
+                            <div v-for="{id, number, date, balance} in clientInfo.accounts"
                                 class="col-12 col-md-4 mt-2 ">
                                 <a class="account-link" v-bind:href="'/web/account.html?id='+id">
                                     <div class="card border-0 account">
@@ -104,6 +104,7 @@
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
     <script src="js/accounts.js"></script>
+
 </body>
 
 </html>
