@@ -68,11 +68,6 @@ public class HomebankingApplication {
             Transaction transaction3 = new Transaction(TransactionType.CREDIT, 2000.0, "Transference", LocalDateTime.now());
             Transaction transaction4 = new Transaction(TransactionType.DEBIT, -1000.0, "Transference", LocalDateTime.now());
 
-            // SAVE TRANSACTIONS
-            transactionRepository.save(transaction1);
-            transactionRepository.save(transaction2);
-            transactionRepository.save(transaction3);
-            transactionRepository.save(transaction4);
 
             // ADD TRANSACTIONS TO ACCOUNT
             account1.addTransaction(transaction1);
@@ -80,16 +75,21 @@ public class HomebankingApplication {
             account2.addTransaction(transaction3);
             account2.addTransaction(transaction4);
 
+            // SAVE TRANSACTIONS
+            transactionRepository.save(transaction1);
+            transactionRepository.save(transaction2);
+            transactionRepository.save(transaction3);
+            transactionRepository.save(transaction4);
+
             // UPDATE BBDD
             accountRepository.save(account1);
             accountRepository.save(account2);
 
 
 
-
             //UPDATE CLIENT
-            clientRepository.save(client1);
-            clientRepository.save(client2);
+            //clientRepository.save(client1);
+            //clientRepository.save(client2);
         };
     }
 };

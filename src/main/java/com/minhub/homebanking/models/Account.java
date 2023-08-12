@@ -1,10 +1,8 @@
 package com.minhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,31 +12,29 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
     private String number;
     private LocalDate creationDate;
     private Double balance;
 
 
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name ="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
+    public Account() {
+    }
 
     public Account(String number, LocalDate creationDate, Double balance) {
 
-        this.id = getId();
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
 
     }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    private Set<Transaction> transactions = new HashSet<>();
 
-
-    public Account() {
-
-    }
 
     public Long getId() {
         return id;
@@ -55,6 +51,7 @@ public class Account {
     public Double getBalance() {
         return balance;
     }
+
     public void setNumber(String number) {
         this.number = number;
     }
@@ -66,20 +63,24 @@ public class Account {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
     public Client getClient() {
         return client;
     }
+
     public void setClient(Client client) {
         this.client = client;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
-    private Set<Transaction> transactions = new HashSet<>();
-
-    public void addTransaction (Transaction transaction) {
-        transactions.add(transaction);
-        transaction.setAccount(this);
+    public Set<Transaction> getTransactions() {
+        return transactions;
     }
 
+
+
+    public void addTransaction(Transaction transaction) {
+        transaction.setAccount(this);
+        this.transactions.add(transaction);
+    }
 }
 

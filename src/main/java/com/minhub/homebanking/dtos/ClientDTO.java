@@ -42,9 +42,6 @@ public class ClientDTO {
     }
 
 
-
-
-
     public Set<AccountDTO> getAccount() {
         return accounts;
     }

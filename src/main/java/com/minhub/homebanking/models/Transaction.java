@@ -1,6 +1,5 @@
 package com.minhub.homebanking.models;
 
-import jdk.jfr.Description;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,34 +9,83 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue (strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+@Enumerated
     private TransactionType type;
-    private Double amount;
 
-    private String text;
+    private Double amount;
+    private String description;
     private LocalDateTime transactionDate;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "account_id")
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn (name ="account_id")
     private Account account;
 
-    public Transaction(){
+
+    public Transaction() {
     }
 
 
-    public Transaction(TransactionType type, Double amount, String text, LocalDateTime transactionDate, Account account) {
+    public Transaction(TransactionType type, Double amount, String description, LocalDateTime transactionDate) {
         this.type = type;
         this.amount = amount;
-        this.text = text;
+        this.description = description;
         this.transactionDate = transactionDate;
+        this.account = account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+
+    }
+
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setText(String text) {
+        this.description = text;
+    }
+
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDAte(LocalDateTime transactionDAte) {
+        this.transactionDate = transactionDAte;
     }
 }
-
-
-
 

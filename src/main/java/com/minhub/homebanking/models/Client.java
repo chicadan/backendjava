@@ -59,18 +59,16 @@ public class Client {
         this.email = email;
     }
 
-    public String toString() {
 
-        return "Name: " + firstName + " " + lastName + ", Email: " + email;
-    }
+
 
     public Set<Account> getAccounts() {
         return accounts;
     }
 
-   public void addAccount(Account account) {
+    public void addAccount(Account account) {
         account.setClient(this);
-        this.accounts.add(account);
+        accounts.add(account);
    }
 
 
