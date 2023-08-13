@@ -38,11 +38,11 @@ public class TransactionDTO {
         return amount;
     }
 
-    public String getText() {
+    public String getDescription() {
         return description;
     }
 
-    public LocalDateTime getTransactionDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 }
