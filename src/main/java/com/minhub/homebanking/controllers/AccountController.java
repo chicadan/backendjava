@@ -1,3 +1,5 @@
+package com.minhub.homebanking.controllers;
+
 import com.minhub.homebanking.dtos.AccountDTO;
 import com.minhub.homebanking.dtos.ClientDTO;
 import com.minhub.homebanking.models.Account;
@@ -28,7 +30,7 @@ public class AccountController {
     }
 
     @RequestMapping("/accounts/{id}")
-    private AccountDTO getClient(@PathVariable Long id){
+    public AccountDTO getClient(@PathVariable Long id){
         return (accountRepository.findById(id)
                 .map(AccountDTO::new)
                 .orElse(null));

@@ -32,8 +32,8 @@ public class Account {
         this.balance = balance;
 
     }
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
-    private Set<Transaction> transactions = new HashSet<>();
+    @OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
+    private  Set<Transaction> transactions = new HashSet<>();
 
 
     public Long getId() {
@@ -76,11 +76,9 @@ public class Account {
         return transactions;
     }
 
-
-
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
-        this.transactions.add(transaction);
+        transactions.add(transaction);
     }
 }
 

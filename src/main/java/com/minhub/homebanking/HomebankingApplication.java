@@ -41,10 +41,10 @@ public class HomebankingApplication {
             clientRepository.save(client2);
 
             //CREATE ACCOUNT
-            Account account1 = new Account("VIN001", LocalDate.now(), 5000.0);
+            Account account1 = new Account("VIN001",LocalDate.now(), 5000.0);
             Account account2 = new Account("VIN002",LocalDate.now().plusDays(1), 7500.0);
             Account account3 = new Account("VIN003",LocalDate.now(), 2000.0);
-            Account account4 = new Account("VIN004", LocalDate.now().plusDays(2), 10000.0);
+            Account account4 = new Account("VIN004",LocalDate.now().plusDays(2), 10000.0);
 
 
 
@@ -63,17 +63,17 @@ public class HomebankingApplication {
 
 
             //CREATE TRANSACTIONS
-            Transaction transaction1 = new Transaction(TransactionType.CREDIT, 1000.0, "Transference", LocalDateTime.now());
+            Transaction transaction1 = new Transaction(TransactionType.CREDIT, 1000.0, "Transference",LocalDateTime.now());
             Transaction transaction2 = new Transaction(TransactionType.DEBIT, -500.0, "Transference", LocalDateTime.now());
-            Transaction transaction3 = new Transaction(TransactionType.CREDIT, 2000.0, "Transference", LocalDateTime.now());
-            Transaction transaction4 = new Transaction(TransactionType.DEBIT, -1000.0, "Transference", LocalDateTime.now());
+            Transaction transaction3 = new Transaction(TransactionType.CREDIT, 2000.0, "Transference",LocalDateTime.now());
+            Transaction transaction4 = new Transaction(TransactionType.DEBIT, -1000.0, "Transference",LocalDateTime.now());
 
 
             // ADD TRANSACTIONS TO ACCOUNT
             account1.addTransaction(transaction1);
-            account1.addTransaction(transaction2);
-            account2.addTransaction(transaction3);
-            account2.addTransaction(transaction4);
+            account2.addTransaction(transaction2);
+            account3.addTransaction(transaction3);
+            account4.addTransaction(transaction4);
 
             // SAVE TRANSACTIONS
             transactionRepository.save(transaction1);
@@ -84,12 +84,13 @@ public class HomebankingApplication {
             // UPDATE BBDD
             accountRepository.save(account1);
             accountRepository.save(account2);
-
+            accountRepository.save(account3);
+            accountRepository.save(account4);
 
 
             //UPDATE CLIENT
-            //clientRepository.save(client1);
-            //clientRepository.save(client2);
+            clientRepository.save(client1);
+            clientRepository.save(client2);
         };
     }
 };

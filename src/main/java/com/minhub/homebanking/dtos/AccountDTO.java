@@ -20,7 +20,9 @@ public class AccountDTO {
         this.number = account.getNumber();
         this.date = account.getCreationDate();
         this.balance = account.getBalance();
-        this.transactions = account.getTransactions().stream().map(element -> new TransactionDTO(element)).collect(Collectors.toSet());
+        this.transactions = account.getTransactions()
+                .stream()
+                .map(element -> new TransactionDTO(element)).collect(Collectors.toSet());
 
     }
 
