@@ -16,14 +16,14 @@ public class ClientLoan {
     private Integer payment;
 
 
-
+    //N-1 CREDIT-CLIENT
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name ="client_id")
     private Client client;
 
+    //N_-1 CREDIT-LOAN
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "loan_id")
-    @JsonIgnore
     private Loan loan;
 
 

@@ -18,14 +18,16 @@ public class Client {
     private Long id;
     private String firstName, lastName,email;
 
-
+    //1-N CLIENT-ACCOUNT
     @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
-    @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
-    private Set<ClientLoan> clientLoans;
+    //1-N CLIENT-CREDIT
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    private Set<ClientLoan> loans = new HashSet<>();
 
-    public List<Loan> getLoans() {return clientLoans.stream().map(element ->element.getLoan()).collect(Collectors.toList());
+
+    public List<Loan> getLoans() {return loans.stream().map(element ->element.getLoan()).collect(Collectors.toList());
     }
 
 
@@ -70,16 +72,13 @@ public class Client {
     }
 
 
-
     public Set<Account> getAccounts() {
         return accounts;
     }
 
     public Set<ClientLoan> getClientLoans() {
-        return clientLoans;
+       return loans;
     }
-
-
 
     public void addAccount(Account account) {
         account.setClient(this);
@@ -88,7 +87,7 @@ public class Client {
 
     public void addClientLoan(ClientLoan clientLoan){
         clientLoan.setClient(this);
-        clientLoans.add(clientLoan);
+        loans.add(clientLoan);
     }
 
 

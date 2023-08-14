@@ -30,14 +30,13 @@ public class Loan {
         this.payments = payments;
     }
 
-
+    //1-N LOAN-CLIENT
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
+    private Set<ClientLoan> clients;
+
     @JsonIgnore
-    private Set<ClientLoan> clientLoans;
-
-
     public List<Client> getClients() {
-        return clientLoans.stream().map(element ->element.getClient()).collect(Collectors.toList());
+        return clients.stream().map(element ->element.getClient()).collect(Collectors.toList());
     }
 
 
@@ -70,14 +69,14 @@ public class Loan {
     }
 
     public Set<ClientLoan> getClientLoans() {
-        return clientLoans;
+        return clients;
     }
 
 
 
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setLoan(this);
-        clientLoans.add(clientLoan);
+        clients.add(clientLoan);
     }
 }
 
