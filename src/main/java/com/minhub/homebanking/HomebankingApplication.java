@@ -1,16 +1,10 @@
 package com.minhub.homebanking;
 
 
-import com.minhub.homebanking.models.Account;
-import com.minhub.homebanking.models.Client;
-
-import com.minhub.homebanking.models.Transaction;
-import com.minhub.homebanking.models.TransactionType;
+import com.minhub.homebanking.models.*;
 
 
-import com.minhub.homebanking.repositories.AccountRepository;
-import com.minhub.homebanking.repositories.ClientRepository;
-import com.minhub.homebanking.repositories.TransactionRepository;
+import com.minhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.fasterxml.jackson.databind.cfg.CoercionInputShape.Array;
 
 
 @SpringBootApplication
@@ -30,7 +27,7 @@ public class HomebankingApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
         return (args) -> {
             //CREATE CLIENT
             Client client1 = new Client("Melba", "Morel", "memo@mail.com");
@@ -47,7 +44,6 @@ public class HomebankingApplication {
             Account account4 = new Account("VIN004",LocalDate.now().plusDays(2), 10000.0);
 
 
-
             //ADD ACCOUNT TO CLIENT
             client1.addAccount(account1);
             client1.addAccount(account2);
@@ -59,7 +55,6 @@ public class HomebankingApplication {
             accountRepository.save(account2);
             accountRepository.save(account3);
             accountRepository.save(account4);
-
 
 
             //CREATE TRANSACTIONS
@@ -87,6 +82,29 @@ public class HomebankingApplication {
             accountRepository.save(account3);
             accountRepository.save(account4);
 
+            //CREATE LOAN
+            Loan loan1 = new Loan("Mortgage Loan",500000.00, List.of(12, 24, 36, 48, 60));
+            Loan loan2 = new Loan("Personal Loan", 100000.00, List.of(6,12,24));
+            Loan loan3 = new Loan("Auto Loan", 300000.00, List.of(6,12,24,36));
+
+            //SAVE LOAN
+            loanRepository.save(loan1);
+            loanRepository.save(loan2);
+            loanRepository.save(loan3);
+
+            //CREATE CLIENTLOAN
+            ClientLoan clientLoan1 = new ClientLoan(400000.00, 60, client1, loan1);
+            ClientLoan clientLoan2 = new ClientLoan(50000.00, 12, client1, loan2);
+            ClientLoan clientLoan3 = new ClientLoan(100000.00, 24, client2, loan2);
+            ClientLoan clientLoan4 = new ClientLoan(200000.00, 36, client2, loan3);
+
+
+
+            //SAVE CLIENTLOAN
+            clientLoanRepository.save(clientLoan1);
+            clientLoanRepository.save(clientLoan2);
+            clientLoanRepository.save(clientLoan3);
+            clientLoanRepository.save(clientLoan4);
 
             //UPDATE CLIENT
             clientRepository.save(client1);

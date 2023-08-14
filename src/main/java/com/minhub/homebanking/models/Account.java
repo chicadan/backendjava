@@ -18,9 +18,7 @@ public class Account {
     private Double balance;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private Client client;
+
 
     public Account() {
     }
@@ -32,6 +30,10 @@ public class Account {
         this.balance = balance;
 
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private Client client;
     @OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
     private  Set<Transaction> transactions = new HashSet<>();
 
