@@ -27,9 +27,10 @@ public class Client {
     private Set<ClientLoan> loans = new HashSet<>();
 
 
-    public List<Loan> getLoans() {return loans.stream()
-            .map(ClientLoan::getLoan)
-            .collect(Collectors.toList());
+    public List<Loan> getLoans() {
+        return loans.stream()
+                    .map(clientLoan ->clientLoan.getLoan())
+                    .collect(Collectors.toList());
     }
 
 

@@ -98,6 +98,18 @@ public class HomebankingApplication {
             ClientLoan clientLoan3 = new ClientLoan(100000.00, 24, client2, loan2);
             ClientLoan clientLoan4 = new ClientLoan(200000.00, 36, client2, loan3);
 
+            //ADD  CLIENTLOAN TO CLIENT-LOAN
+            client1.addClientLoan(clientLoan1);
+            loan1.addClientLoan(clientLoan1);
+
+            client1.addClientLoan(clientLoan2);
+            loan2.addClientLoan(clientLoan2);
+
+            client2.addClientLoan(clientLoan3);
+            loan2.addClientLoan(clientLoan3);
+
+            client2.addClientLoan(clientLoan4);
+            loan3.addClientLoan(clientLoan4);
 
 
             //SAVE CLIENTLOAN

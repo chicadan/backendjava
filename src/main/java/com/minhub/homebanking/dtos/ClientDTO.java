@@ -25,7 +25,7 @@ public class ClientDTO {
                 .map(element -> new AccountDTO(element)).collect(Collectors.toSet());
         this.loans = client.getClientLoans()
                 .stream()
-                .map(element -> new ClientLoanDTO(element))
+                .map(clientLoan -> new ClientLoanDTO(clientLoan))
                 .collect(Collectors.toSet());
 
 

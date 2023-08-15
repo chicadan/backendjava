@@ -5,6 +5,7 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class Loan {
     private String name;
     private Double maxAmount;
     @ElementCollection
-    private List<Integer> payments;
+    private List<Integer> payments = new ArrayList<>();
 
     public Loan() {
 
@@ -32,12 +33,12 @@ public class Loan {
 
     //1-N LOAN-CLIENT
     @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
-    private Set<ClientLoan> clients;
+    private Set<ClientLoan> clients = new HashSet<>();
 
     @JsonIgnore
     public List<Client> getClients() {
         return clients.stream()
-                .map(ClientLoan::getClient)
+                .map(clientLoan -> clientLoan.getClient())
                 .collect(Collectors.toList());
     }
 
@@ -70,9 +71,7 @@ public class Loan {
         this.payments = payments;
     }
 
-    //public Set<ClientLoan> getClientLoans() {
-     //   return clients;
-    //}
+    public void setClients(Set<ClientLoan> clients) { this.clients = clients;}
 
 
 
