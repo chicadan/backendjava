@@ -36,7 +36,9 @@ public class Loan {
 
     @JsonIgnore
     public List<Client> getClients() {
-        return clients.stream().map(element ->element.getClient()).collect(Collectors.toList());
+        return clients.stream()
+                .map(ClientLoan::getClient)
+                .collect(Collectors.toList());
     }
 
 
@@ -68,9 +70,9 @@ public class Loan {
         this.payments = payments;
     }
 
-    public Set<ClientLoan> getClientLoans() {
-        return clients;
-    }
+    //public Set<ClientLoan> getClientLoans() {
+     //   return clients;
+    //}
 
 
 
