@@ -27,7 +27,7 @@ public class HomebankingApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
         return (args) -> {
             //CREATE CLIENT
             Client client1 = new Client("Melba", "Morel", "memo@mail.com");
@@ -117,6 +117,24 @@ public class HomebankingApplication {
             clientLoanRepository.save(clientLoan2);
             clientLoanRepository.save(clientLoan3);
             clientLoanRepository.save(clientLoan4);
+
+
+            //CREATE
+            Card card1 = new Card(CardType.DEBIT, "4555 7000 0148 3633", 444, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), ColorType.GOLD);
+            Card card2 = new Card(CardType.CREDIT, "4540 9900 0133 1972", 132, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), ColorType.TITANIUM);
+            Card card3 = new Card(CardType.CREDIT, "3779 00000 19785", 3423, LocalDate.now(), LocalDate.now().plusYears(5), client2.getFirstName() + " " + client2.getLastName(), ColorType.SILVER);
+
+
+            //ADD CARD TO CLIENT
+            client1.addCard(card1);
+            client1.addCard(card2);
+            client2.addCard(card3);
+
+            //SAVE DDBB
+            cardRepository.save(card1);
+            cardRepository.save(card2);
+            cardRepository.save(card3);
+
 
             //UPDATE CLIENT
             clientRepository.save(client1);
