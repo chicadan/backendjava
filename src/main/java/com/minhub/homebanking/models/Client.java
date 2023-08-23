@@ -1,6 +1,5 @@
 package com.minhub.homebanking.models;
 
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,7 +15,8 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private String firstName, lastName,email;
+    private String firstName, lastName,email, password;
+    private RoleType role;
 
     //1-N CLIENT-ACCOUNT
     @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
@@ -26,6 +26,7 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<ClientLoan> loans = new HashSet<>();
 
+    //1-N CLIENT-CARD
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Card> cards = new HashSet<>();
 
@@ -34,10 +35,12 @@ public class Client {
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email) {
+    public Client(String firstName, String lastName, String email, String password, RoleType role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
+        this.role = role;
 
     }
 
@@ -68,6 +71,22 @@ public class Client {
         this.email = email;
     }
 
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public RoleType getRole() {
+        return role;
+    }
+
+    public void setRole(RoleType role) {
+        this.role = role;
+    }
 
     public Set<Account> getAccounts() {
         return accounts;

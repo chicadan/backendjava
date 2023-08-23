@@ -5,10 +5,13 @@ import com.minhub.homebanking.models.*;
 
 
 import com.minhub.homebanking.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.time.LocalDate;
 
 import java.time.LocalDate;
@@ -25,17 +28,22 @@ public class HomebankingApplication {
     public static void main(String[] args) {
         SpringApplication.run(HomebankingApplication.class);
     }
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Bean
-    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
+    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository,
+                                      TransactionRepository transactionRepository, LoanRepository loanRepository,
+                                      ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
         return (args) -> {
             //CREATE CLIENT
-            Client client1 = new Client("Melba", "Morel", "memo@mail.com");
-            Client client2 = new Client("Alvaro", "Gonzalez", "agon@mail.com");
+            Client client1 = new Client("Melba", "Morel", "memo@minhub.com", passwordEncoder.encode("123456" ), RoleType.CLIENT);
+            Client client2 = new Client("Alvaro", "Gonzalez", "agon@minhub.com", passwordEncoder.encode("098765"), RoleType.CLIENT);
+            Client client3 = new Client("admin", "admin", "admin@minhub.com", passwordEncoder.encode("admin"),RoleType.ADMIN);
 
             //SAVE BBDD CLIENT
             clientRepository.save(client1);
             clientRepository.save(client2);
+            clientRepository.save(client3);
 
             //CREATE ACCOUNT
             Account account1 = new Account("VIN001",LocalDate.now(), 5000.0);
@@ -93,10 +101,10 @@ public class HomebankingApplication {
             loanRepository.save(loan3);
 
             //CREATE CLIENTLOAN
-            ClientLoan clientLoan1 = new ClientLoan(400000.00, 60, client1, loan1);
-            ClientLoan clientLoan2 = new ClientLoan(50000.00, 12, client1, loan2);
-            ClientLoan clientLoan3 = new ClientLoan(100000.00, 24, client2, loan2);
-            ClientLoan clientLoan4 = new ClientLoan(200000.00, 36, client2, loan3);
+            ClientLoan clientLoan1 = new ClientLoan(400000.00, 60);
+            ClientLoan clientLoan2 = new ClientLoan(50000.00, 12);
+            ClientLoan clientLoan3 = new ClientLoan(100000.00, 24);
+            ClientLoan clientLoan4 = new ClientLoan(200000.00, 36);
 
             //ADD  CLIENTLOAN TO CLIENT-LOAN
             client1.addClientLoan(clientLoan1);
@@ -139,6 +147,9 @@ public class HomebankingApplication {
             //UPDATE CLIENT
             clientRepository.save(client1);
             clientRepository.save(client2);
+            clientRepository.save(client3);
+
+
         };
     }
 };
