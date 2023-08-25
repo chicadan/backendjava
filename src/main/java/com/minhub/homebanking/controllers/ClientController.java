@@ -47,13 +47,13 @@ public class ClientController {
                 @RequestParam String email, @RequestParam String password) {
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);//403
             }
             if (clientRepository.findByEmail(email) !=  null) {
-                return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);//403
             }
             clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password),RoleType.CLIENT));
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);//201
         }
 
     @RequestMapping(value = "/clients/current", method = RequestMethod.GET)
