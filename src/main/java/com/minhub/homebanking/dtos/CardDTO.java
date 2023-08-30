@@ -2,7 +2,7 @@ package com.minhub.homebanking.dtos;
 
 import com.minhub.homebanking.models.Card;
 import com.minhub.homebanking.models.CardType;
-import com.minhub.homebanking.models.ColorType;
+import com.minhub.homebanking.models.CardColor;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,7 @@ public class CardDTO {
     private LocalDate fromDate;
     private LocalDate thruDate;
     private String cardHolder;
-    private ColorType color;
+    private CardColor color;
 
     public CardDTO(Card card) {
         this.id = card.getId();
@@ -57,7 +57,7 @@ public class CardDTO {
         return cardHolder;
     }
 
-    public ColorType getColor() {
+    public CardColor getColor() {
         return color;
     }
 }

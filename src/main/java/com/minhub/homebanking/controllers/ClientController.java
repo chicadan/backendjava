@@ -27,36 +27,37 @@ public class ClientController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(value = "/clients", method = RequestMethod.GET)
+    @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         List<Client> listClient = clientRepository.findAll();
         return listClient.stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
     @RequestMapping("/clients/{id}")
-    public ClientDTO getClient(@PathVariable Long id){
-        return (clientRepository.findById(id)
-                .map(ClientDTO::new)
-                .orElse(null));
+    public ResponseEntity <Object> getClientId (@PathVariable Long id){
+        Client client = clientRepository.findById(id).orElse(null);
+        ClientDTO clientDTO = new ClientDTO(client);
+        return new ResponseEntity<>(clientDTO,HttpStatus.OK);
     }
 
-
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @RequestMapping("/clients")
     public ResponseEntity<Object> register(
                 @RequestParam String firstName, @RequestParam String lastName,
                 @RequestParam String email, @RequestParam String password) {
 
-            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
                 return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);//403
             }
             if (clientRepository.findByEmail(email) !=  null) {
                 return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);//403
             }
-            clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password),RoleType.CLIENT));
-            return new ResponseEntity<>(HttpStatus.CREATED);//201
+            Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password),RoleType.CLIENT);
+            clientRepository.save(client);
+            return new ResponseEntity<>("Registered", HttpStatus.CREATED);//201
         }
 
-    @RequestMapping(value = "/clients/current", method = RequestMethod.GET)
+        //CLIENT AUTHENTICATION
+    @GetMapping("/clients/current")
     public ClientDTO getClientCurrent(Authentication authentication) {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }

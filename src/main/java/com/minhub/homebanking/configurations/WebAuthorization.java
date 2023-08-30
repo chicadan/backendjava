@@ -26,13 +26,32 @@ public class WebAuthorization  {
 
         http.authorizeRequests()
 
-                //CHEQUER
-                .antMatchers("/web/index.html","/web/js/**","/web/ccs/**","/web/img/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/login").permitAll()
+
+
+
+                .antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll() // PUBLIC ALL
+                .antMatchers(HttpMethod.POST,"/api/login").permitAll() //PUBLIC ACCESS TO SIGN IN
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers("/admin/**","/rest/**","/h2-console","/web/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET,"/api/clients/current","/web/**").hasAuthority("CLIENT");
-                //.anyRequest().denyAll();
+                .antMatchers("/rest/**","/h2-console/**","/api/clients").hasAuthority("ADMIN") // ONLY ADMIN
+                .antMatchers("/api/clients/current","/web/**","api/clients/{id}","/api/clients/current/accounts").hasAuthority("CLIENT") // ONLY CLIENT
+                .antMatchers(HttpMethod.POST,"/api/clients/current/**").hasAuthority("CLIENT")
+                .anyRequest().denyAll();
+
+                /*.antMatchers("/web/index.html", "/web/js/**","/web/css/**","/web/img/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login","/api/logout","/api/clients").permitAll()
+                .antMatchers("/h2-console/**","/rest/**", "/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/api/**","/api/clients/{id}").hasAuthority("CLIENT")
+                .antMatchers("/api/clients/current", "/web/**","/api/clients/**").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/clients/current/accounts/**","/clients/current/cards").hasAuthority("CLIENT")
+                .anyRequest().denyAll();*/
+
+                /*.antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll()
+                .antMatchers("/rest/**", "/h2-console/**").hasAuthority("ADMIN")
+                .antMatchers("/api/clients/current","/web/**","/api/accounts/**","/api/login","/api/logout","/api/clients/**").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST,"/api/clients/current/**","/api/logout").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST,"/api/**").permitAll()
+                .anyRequest().denyAll();*/
+
 
         http.formLogin()
 
@@ -41,7 +60,7 @@ public class WebAuthorization  {
                 .loginPage("/api/login");
 
 
-        http.logout().logoutUrl("/api/logout");
+        http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
 
 
 
@@ -69,13 +88,9 @@ public class WebAuthorization  {
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
-
         HttpSession session = request.getSession(false);
-
         if (session != null) {
-
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
         }
     }
 

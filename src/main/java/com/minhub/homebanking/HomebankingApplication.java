@@ -36,9 +36,9 @@ public class HomebankingApplication {
                                       ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
         return (args) -> {
             //CREATE CLIENT
-            Client client1 = new Client("Melba", "Morel", "memo@minhub.com", passwordEncoder.encode("123456" ), RoleType.CLIENT);
-            Client client2 = new Client("Alvaro", "Gonzalez", "agon@minhub.com", passwordEncoder.encode("098765"), RoleType.CLIENT);
-            Client client3 = new Client("admin", "admin", "admin@minhub.com", passwordEncoder.encode("admin"),RoleType.ADMIN);
+            Client client1 = new Client("Melba", "Morel", "memo@mindhub.com", passwordEncoder.encode("123456" ), RoleType.CLIENT);
+            Client client2 = new Client("Alvaro", "Gonzalez", "agon@mindhub.com", passwordEncoder.encode("098765"), RoleType.CLIENT);
+            Client client3 = new Client("admin", "admin", "admin@mindhub.com", passwordEncoder.encode("admin"),RoleType.ADMIN);
 
             //SAVE BBDD CLIENT
             clientRepository.save(client1);
@@ -128,9 +128,9 @@ public class HomebankingApplication {
 
 
             //CREATE
-            Card card1 = new Card(CardType.DEBIT, "4555 7000 0148 3633", 444, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), ColorType.GOLD);
-            Card card2 = new Card(CardType.CREDIT, "4540 9900 0133 1972", 132, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), ColorType.TITANIUM);
-            Card card3 = new Card(CardType.CREDIT, "3779 00000 19785", 3423, LocalDate.now(), LocalDate.now().plusYears(5), client2.getFirstName() + " " + client2.getLastName(), ColorType.SILVER);
+            Card card1 = new Card(CardType.DEBIT, "4555 7000 0148 3633", 444, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), CardColor.GOLD);
+            Card card2 = new Card(CardType.CREDIT, "4540 9900 0133 1972", 132, LocalDate.now(), LocalDate.now().plusYears(5), client1.getFirstName() + " " + client1.getLastName(), CardColor.TITANIUM);
+            Card card3 = new Card(CardType.CREDIT, "3779 00000 19785", 3423, LocalDate.now(), LocalDate.now().plusYears(5), client2.getFirstName() + " " + client2.getLastName(), CardColor.SILVER);
 
 
             //ADD CARD TO CLIENT
