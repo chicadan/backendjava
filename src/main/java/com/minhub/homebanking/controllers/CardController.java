@@ -63,61 +63,43 @@ public class CardController {
         // CLIENT AUTH
         Client client = clientRepository.findByEmail(authentication.getName());
 
-       if (client == null) {
+        if (client == null) {
             return new ResponseEntity<>("Client not found", HttpStatus.NOT_FOUND);
         }
 
-        List<Card> cardsSameColorType = client.getCards().stream()
-                .filter(card -> card.getColor() == cardColor)
-                .collect(Collectors.toList());
+        //CHECK COLOR AND TYPE CARD ALLOW
+        List<Card> cardUniqueTypeColor = client.getCards().stream()
+                .filter(card -> card.getType() == cardType && card.getColor() == cardColor).collect(Collectors.toList());
 
-            // CHECK COLOR TYPE
-            if (cardsSameColorType.size() == 2) {
-                return new ResponseEntity<>("You already have the maximum number of cards " + cardColor, HttpStatus.FORBIDDEN);
+        if ((long) cardUniqueTypeColor.size() ==1){
+            return new ResponseEntity<>("It's not Allow", HttpStatus.FORBIDDEN);
         }
-            // CHECK CARD TYPE DEBIT
-            long debitCardsCount = cardRepository.countByClientAndType(client, CardType.DEBIT);
-            // CHECK CARD TYPE CREDIT
-            long creditCardsCount = cardRepository.countByClientAndType(client, CardType.CREDIT);
-
-            if (cardType == CardType.DEBIT && debitCardsCount == 3) {
-                return new ResponseEntity<>("You already have the maximum number of debit cards.", HttpStatus.FORBIDDEN);
-            }
-            if (cardType == CardType.CREDIT && creditCardsCount == 3) {
-                return new ResponseEntity<>("You already have the maximum number of credit cards.", HttpStatus.FORBIDDEN);
-            }
-
-
 
         // GENERATE CARD NUMBER RANDOM
-            String number;
+        String cardNumber;
 
-            do {
-                number = RandomUtils.generateRandomCardNumber();
-            }
-            while (cardRepository.existsByNumber(number));
+        do {
+            cardNumber = RandomUtils.generateRandomCardNumber();
+        } while (cardRepository.existsByNumber(cardNumber));
 
-            // GENERATE SECURITY CODE RANDOM
-            Integer cvv = RandomUtils.generateRandomCvv();
-
-            LocalDate fromDate = LocalDate.now();
-            LocalDate thruDate = fromDate.plusYears(5);
-            String cardHolder = client.getFirstName() + " " + client.getLastName();
-
-            // CREATE CARD
-            Card newCard = new Card(cardType, number, cvv, fromDate, thruDate, client.getFirstName()+ " " +client.getLastName(), cardColor);
-            newCard.setClient(client);
-
-            //ADD CARD
-            client.addCard(newCard);
-            // SAVE CARD
-            cardRepository.save(newCard);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("Card created successfully");  // 201
-        }
+        // GENERATE SECURITY CODE RANDOM
+        Integer cvv = RandomUtils.generateRandomCvv();
 
 
+        // CREATE CARD
+        Card newCard = new Card(cardType, cardNumber, cvv, LocalDate.now(), LocalDate.now().plusYears(5), client.getFirstName()+ " " +client.getLastName(), cardColor);
+        newCard.setClient(client);
+
+        //ADD CARD
+        client.addCard(newCard);
+        // SAVE CARD
+        cardRepository.save(newCard);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Card created successfully");  // 201
     }
+
+
+}
 
 
 

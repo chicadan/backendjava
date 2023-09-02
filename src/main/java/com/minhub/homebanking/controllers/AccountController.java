@@ -31,12 +31,12 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
-   @RequestMapping("/accounts")
-   public List<AccountDTO> getAccounts() {
-       return accountRepository.findAll()
-               .stream()
-               .map(AccountDTO::new).collect(Collectors.toList());
-   }
+    @RequestMapping("/accounts")
+    public List<AccountDTO> getAccounts() {
+        return accountRepository.findAll()
+                .stream()
+                .map(AccountDTO::new).collect(Collectors.toList());
+    }
 
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
@@ -72,20 +72,15 @@ public class AccountController {
 
         // CREATE NEW ACCOUNT UNIQUE
         String accountNumber;
-        Account newAccount;
+        Account newAccount = new Account();
+        newAccount.setCreationDate(LocalDate.now());
+        newAccount.setBalance(0.0);
+        newAccount.setClient(client);
 
-        do{
+        do {
             accountNumber = RandomUtils.generateRandomAccountNumber();
-
-            newAccount = new Account();
             newAccount.setNumber(accountNumber);
-            newAccount.setCreationDate(LocalDate.now());
-            newAccount.setBalance(0.0);
-            newAccount.setClient(client);
-
-
         } while (accountRepository.existsByNumber(accountNumber));
-
 
         // SAVE
         accountRepository.save(newAccount);

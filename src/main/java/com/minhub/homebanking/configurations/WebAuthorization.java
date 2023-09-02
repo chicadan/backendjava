@@ -32,8 +32,8 @@ public class WebAuthorization  {
                 .antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll() // PUBLIC ALL
                 .antMatchers(HttpMethod.POST,"/api/login").permitAll() //PUBLIC ACCESS TO SIGN IN
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers("/rest/**","/h2-console/**","/api/clients").hasAuthority("ADMIN") // ONLY ADMIN
-                .antMatchers("/api/clients/current","/web/**","api/clients/{id}","/api/clients/current/accounts").hasAuthority("CLIENT") // ONLY CLIENT
+                .antMatchers("/rest/**","/h2-console/**","/api/clients","api/clients/{id}").hasAuthority("ADMIN") // ONLY ADMIN
+                .antMatchers("/api/clients/current","/web/**","/api/clients/current/accounts").hasAuthority("CLIENT") // ONLY CLIENT
                 .antMatchers(HttpMethod.POST,"/api/clients/current/**").hasAuthority("CLIENT")
                 .anyRequest().denyAll();
 
