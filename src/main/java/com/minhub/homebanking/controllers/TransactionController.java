@@ -51,22 +51,23 @@ public class TransactionController {
         // 403 forbidden, si la cuenta de origen es la misma que la destino OK
 
 
-        // CHECK CLIENT AUTH
-        Client client = clientRepository.findByEmail(authentication.getName());
 
+
+        Client client = clientRepository.findByEmail(authentication.getName());
         Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
         Account toAccount = accountRepository.findByNumber(toAccountNumber);
 
+        // CHECK CLIENT AUTH
+
+
         // CHECK REQUEST PARAM EMPTY
         if(Double.isNaN(amount)|| description.isBlank()|| fromAccountNumber.isBlank()|| toAccountNumber.isBlank()){
-            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("All data is required", HttpStatus.BAD_REQUEST);
         }
         // CHECK ACCOUNTS NUMBER BE DIFFERENT
         if(fromAccountNumber.equals(toAccountNumber)){
             return new ResponseEntity<>("Source and Target accounts cannot be the same",HttpStatus.BAD_REQUEST);
         }
-
-
 
         //CHECK ACCOUNT TO
         if(fromAccount==null ){

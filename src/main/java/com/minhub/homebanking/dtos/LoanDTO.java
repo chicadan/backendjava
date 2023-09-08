@@ -34,4 +34,6 @@ public class LoanDTO {
     public List<Integer> getPayments() {
         return payments;
     }
+
+
 }
