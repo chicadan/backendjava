@@ -33,6 +33,7 @@ public class AccountController {
 
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts() {
+
         return accountRepository.findAll()
                 .stream()
                 .map(AccountDTO::new).collect(Collectors.toList());
@@ -83,7 +84,9 @@ public class AccountController {
         } while (accountRepository.existsByNumber(accountNumber));
 
         // SAVE
+
         accountRepository.save(newAccount);
+        client.addAccount(newAccount);
 
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }

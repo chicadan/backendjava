@@ -85,4 +85,4 @@ public class ClientController {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 
-    }
+}

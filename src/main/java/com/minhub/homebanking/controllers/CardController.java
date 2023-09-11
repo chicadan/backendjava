@@ -53,8 +53,6 @@ public class CardController {
         return new ResponseEntity<>(cardDTOs, HttpStatus.OK);
     }
 
-
-
     @PostMapping("clients/current/cards")
     public ResponseEntity<Object> createCard(
             @RequestParam CardType cardType,

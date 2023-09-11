@@ -25,22 +25,22 @@ public class WebAuthorization  {
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception {
 
         http.authorizeRequests()
-      /*         .antMatchers("/web/index.html", "/web/js/**","/web/css/**","/web/img/**").permitAll()
+                .antMatchers("/web/index.html", "/web/js/**","/web/css/**","/web/img/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/login","/api/logout","/api/clients").permitAll()
                 .antMatchers("/h2-console/**","/rest/**", "/api/clients").hasAuthority("ADMIN")
                 .antMatchers("/api/**","/api/clients/{id}","/loans").hasAuthority("CLIENT")
                 .antMatchers("/api/clients/current", "/web/**","/api/clients/**","/clients/current/accounts").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.POST, "/clients/current/accounts/**","/clients/current/cards","/transactions","/loans").hasAuthority("CLIENT")
-                .anyRequest().denyAll();*/
+                .anyRequest().denyAll();
 
 
-                .antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll() // PUBLIC ALL FE
+               /* .antMatchers("/web/index.html","/web/js/**","/web/css/**","/web/img/**").permitAll() // PUBLIC ALL FE
                 .antMatchers(HttpMethod.POST,"/api/login", "/api/logout").permitAll() //PUBLIC ACCESS TO SIGN IN
                 .antMatchers(HttpMethod.POST, "/api/clients").permitAll()//PUBLIC ACCESS TO CREATE
                 .antMatchers("/api/clients/current","/web/**","/api/clients/current/accounts","/api/loans").hasAuthority("CLIENT") // ONLY CLIENT
                 .antMatchers(HttpMethod.POST,"/api/clients/current/**", "/api/transactions","/api/loans","/api/**").hasAuthority("CLIENT")//CLIENT ACCESS TO CREATE
                 .antMatchers("/rest/**","/h2-console/**").hasAuthority("ADMIN") // ONLY ADMIN
-                .anyRequest().denyAll();//REST DENY ALL
+                .anyRequest().denyAll();//SUPERPOWER ADMIN*/
 
 
 

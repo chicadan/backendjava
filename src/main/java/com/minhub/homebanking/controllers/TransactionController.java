@@ -51,23 +51,20 @@ public class TransactionController {
         // 403 forbidden, si la cuenta de origen es la misma que la destino OK
 
 
-
-
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
-        Account toAccount = accountRepository.findByNumber(toAccountNumber);
-
         // CHECK CLIENT AUTH
-
+        Client client = clientRepository.findByEmail(authentication.getName());
 
         // CHECK REQUEST PARAM EMPTY
         if(Double.isNaN(amount)|| description.isBlank()|| fromAccountNumber.isBlank()|| toAccountNumber.isBlank()){
-            return new ResponseEntity<>("All data is required", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
         }
         // CHECK ACCOUNTS NUMBER BE DIFFERENT
         if(fromAccountNumber.equals(toAccountNumber)){
             return new ResponseEntity<>("Source and Target accounts cannot be the same",HttpStatus.BAD_REQUEST);
         }
+
+        Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
+        Account toAccount = accountRepository.findByNumber(toAccountNumber);
 
         //CHECK ACCOUNT TO
         if(fromAccount==null ){
@@ -89,8 +86,8 @@ public class TransactionController {
         }
 
         //CREATE TRANSFER
-        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount,description + "  TRANSFER TO: " + fromAccountNumber, LocalDateTime.now());
-        Transaction creditTransaction = new Transaction(TransactionType.CREDIT,amount,description + "  TRANSFER FROM: " + toAccountNumber, LocalDateTime.now());
+        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount,description + "TRANSFER TO ... - " + fromAccountNumber, LocalDateTime.now());
+        Transaction creditTransaction = new Transaction(TransactionType.CREDIT,amount,description + "TRANSFER FROM ... - " + toAccountNumber, LocalDateTime.now());
 
 
         //MAPPING TRANSFER-ACCOUNTS
