@@ -55,12 +55,12 @@ public class TransactionController {
         Client client = clientRepository.findByEmail(authentication.getName());
 
         // CHECK REQUEST PARAM EMPTY
-        if(Double.isNaN(amount)|| description.isBlank()|| fromAccountNumber.isBlank()|| toAccountNumber.isBlank()){
-            return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
+        if(amount == null || description.isBlank()|| fromAccountNumber.isBlank()|| toAccountNumber.isBlank()){
+            return new ResponseEntity<>("All data is required", HttpStatus.FORBIDDEN);
         }
         // CHECK ACCOUNTS NUMBER BE DIFFERENT
         if(fromAccountNumber.equals(toAccountNumber)){
-            return new ResponseEntity<>("Source and Target accounts cannot be the same",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Source and Target accounts cannot be the same",HttpStatus.FORBIDDEN);
         }
 
         Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
@@ -76,18 +76,18 @@ public class TransactionController {
         String authUserName = authentication.getName();
 
         if(!authClient.getEmail().equals(authUserName)){
-            return new ResponseEntity<>("Unauthorized",HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized",HttpStatus.FORBIDDEN);
 
         }
         // CHECK AMOUNT ACCOUNT TO
         if(fromAccount.getBalance()< amount){
-            return new ResponseEntity<>("Insufficient balance",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Insufficient balance",HttpStatus.FORBIDDEN);
 
         }
 
         //CREATE TRANSFER
-        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount,description + "TRANSFER TO ... - " + fromAccountNumber, LocalDateTime.now());
-        Transaction creditTransaction = new Transaction(TransactionType.CREDIT,amount,description + "TRANSFER FROM ... - " + toAccountNumber, LocalDateTime.now());
+        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount,description + " Transfer To  - " + fromAccountNumber, LocalDateTime.now());
+        Transaction creditTransaction = new Transaction(TransactionType.CREDIT,amount,description + " Transfer From  - " + toAccountNumber, LocalDateTime.now());
 
 
         //MAPPING TRANSFER-ACCOUNTS
