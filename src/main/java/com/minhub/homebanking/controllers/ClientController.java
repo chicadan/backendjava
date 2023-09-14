@@ -41,14 +41,14 @@ public class ClientController {
         return listClient.stream().map(ClientDTO::new).collect(Collectors.toList());
     }
 
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ResponseEntity <Object> getClientId (@PathVariable Long id){
         Client client = clientRepository.findById(id).orElse(null);
         ClientDTO clientDTO = new ClientDTO(client);
         return new ResponseEntity<>(clientDTO,HttpStatus.OK);
     }
 
-    @RequestMapping("/clients")
+    @PostMapping("/clients")
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {

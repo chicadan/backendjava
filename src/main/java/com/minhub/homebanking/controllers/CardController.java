@@ -28,12 +28,12 @@ public class CardController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/cards")
+    @GetMapping("/cards")
     public List<CardDTO> getCards(){
         List<Card> listCard = cardRepository.findAll();
         return listCard.stream().map(CardDTO::new).collect(Collectors.toList());
     }
-    @RequestMapping("/cards/{id}")
+    @GetMapping("/cards/{id}")
     public CardDTO getCardById (@PathVariable Long id){
         return new CardDTO(cardRepository.findById(id).orElse(null));
     }
@@ -98,7 +98,3 @@ public class CardController {
 
 
 }
-
-
-
-

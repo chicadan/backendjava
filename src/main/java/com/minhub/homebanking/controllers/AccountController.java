@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import static com.minhub.homebanking.utils.RandomUtils.generateRandomAccountNumber;
 
 @RestController
-@RequestMapping ("/api")
+@RequestMapping("/api")
 public class AccountController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts() {
 
         return accountRepository.findAll()
@@ -39,7 +39,7 @@ public class AccountController {
                 .map(AccountDTO::new).collect(Collectors.toList());
     }
 
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
         return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
@@ -93,20 +93,3 @@ public class AccountController {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
