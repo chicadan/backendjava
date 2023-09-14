@@ -34,106 +34,74 @@ public class LoanController {
 
     @GetMapping("/loans")
     public List<LoanDTO> getLoans(){
-        List<Loan> listLoan = loanRepository.findAll();
-        return listLoan.stream().map(LoanDTO::new).collect(Collectors.toList());
+        return  loanRepository.findAll().stream().map(LoanDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
     @PostMapping("/loans")
     public ResponseEntity<Object> applyForLoan(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication) {
 
+            //CLIENT AUTH
+            Client client = clientRepository.findByEmail(authentication.getName());
+            if(client == null)
+                return new ResponseEntity<>("Invalid Client",HttpStatus.NOT_FOUND);
 
-        // Verificar que los datos sean correctos, es decir no estén vacíos, que el monto no sea 0 o que las cuotas no sean 0. OK
-        //Verificar que el préstamo exista OK
-        //Verificar que el monto solicitado no exceda el monto máximo del préstamo OK
-        //Verifica que la cantidad de cuotas se encuentre entre las disponibles del préstamo Ok
-        //Verificar que la cuenta de destino exista OK
-        //Verificar que la cuenta de destino pertenezca al cliente autenticado OK
-
-        // Se debe crear una solicitud de préstamo con el monto solicitado sumando el 20% del mismo
-        // Se debe crear una transacción “CREDIT” asociada a la cuenta de destino (el monto debe quedar positivo) con la descripción concatenando el nombre del préstamo y la frase “loan approved”
-        // Se debe actualizar la cuenta de destino sumando el monto solicitado.*/
-
-   /* GET /api/loans ninguno Json con los préstamos disponibles
-    POST /api/loans solicitud de préstamo creado al cliente autenticado
-                    transacción creada para cuenta de destino
-                    cuenta de destino actualizada con el  monto
-
-    éxito: 201 created
-    respuestas de error:
-            403 forbidden, si alguno de los datos no es válido
-            403 forbidden, si la cuenta de destino no existe
-            403 forbidden, si la cuenta de destino no pertenece al cliente autenticado
-            403 forbidden, si el préstamo no existe
-            403 forbidden, si el monto solicitado supera el monto máximo permitido del préstamo solicitado
-            403 forbidden, si la cantidad de cuotas no está  disponible para el préstamo solicitado*/
-
-
-
-        Client client = clientRepository.findByEmail(authentication.getName());
-
-        Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
-        Account toAccount = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
-
-
-        //CHECK REQUEST BODY EMPTY
-        if (loan==null || loanApplicationDTO.getAmount() == null || loanApplicationDTO.getPayments() == null) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            //LOAN EXIST
+            Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
+            if (loan == null) {
+                 return new ResponseEntity<>("Loan not found", HttpStatus.FORBIDDEN);
         }
+            //CHECK AMOUNT & PAYMENTS != ZERO
+            if (loanApplicationDTO.getAmount() <= 0 || loanApplicationDTO.getPayments() <= 0) {
+                return new ResponseEntity<>("Invalid loan data", HttpStatus.FORBIDDEN);
+            }
 
-        //CHECK AMOUNT & PAYMENTS NOT ZERO
-        if (loanApplicationDTO.getAmount() == 0 || loanApplicationDTO.getPayments() == 0) {
-            return new ResponseEntity<>("Invalid loan data", HttpStatus.FORBIDDEN);
-        }
-        //CHECK LOAN EXISTS
-        if (!loanRepository.existsById(loanApplicationDTO.getLoanId())) {
-            return new ResponseEntity<>("Loan not found", HttpStatus.FORBIDDEN);
-        }
+            // CHECK AMOUNT < MAX AMOUNT
+            if (loanApplicationDTO.getAmount() > loan.getMaxAmount()) {
+                return new ResponseEntity<>("Amount exceeds the allowed limit", HttpStatus.FORBIDDEN);
+            }
 
-        // CHECK EXIST TO ACCOUNT NUMBER
-        if (toAccount == null) {
-            return new ResponseEntity<>("Destination account not found", HttpStatus.FORBIDDEN);
-        }
-        //CHECK TO ACCOUNT NUMBER BELONG TO CLIENT AUTH
-        if (!client.getAccounts().contains(toAccount)) {
-            return new ResponseEntity<>("Unauthorized to use destination account", HttpStatus.FORBIDDEN);
-        }
+            //CHECK NUMBER PAYMENTS AVAILABLE
+            if (!loan.getPayments().contains(loanApplicationDTO.getPayments())) {
+                return new ResponseEntity<>("Unavailable number of payments", HttpStatus.FORBIDDEN);
+            }
 
-        // CHECK AMOUNT < MAX AMOUNT
-        // Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
-        if (loanApplicationDTO.getAmount() > loan.getMaxAmount()) {
-            return new ResponseEntity<>("Amount exceeds the allowed limit", HttpStatus.FORBIDDEN);
-        }
-        //CHECK NUMBER PAYMENTS AVAILABLE
-        if(!loan.getPayments().contains(loanApplicationDTO.getPayments())){
-            return new ResponseEntity<>("Unavailable number of payments", HttpStatus.FORBIDDEN);
+            // CHECK EXIST TO ACCOUNT NUMBER
+            Account toAccount = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
+            if (toAccount == null) {
+                return new ResponseEntity<>("Destination account not found", HttpStatus.FORBIDDEN);
+            }
+
+            //CHECK TO ACCOUNT NUMBER BELONG TO CLIENT AUTH
+            if (!client.getAccounts().contains(toAccount)) {
+                return new ResponseEntity<>("Unauthorized to use destination account", HttpStatus.FORBIDDEN);
+            }
+
+            //NEW LOAN
+            ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()* 1.2, loanApplicationDTO.getPayments());// +20% TAX
+            //ADD
+            loan.addClientLoan(clientLoan);
+            client.addClientLoan(clientLoan);
+            clientLoanRepository.save(clientLoan);
+
+
+            //NEW TRANSACTION
+            Transaction creditTransaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), "Loan  " + clientLoan.getLoan().getName() + " Approved", LocalDateTime.now());
+            //ADD
+            toAccount.addTransaction(creditTransaction);
+
+            //UPDATE BALANCE
+            toAccount.setBalance(toAccount.getBalance()+ loanApplicationDTO.getAmount());
+
+            // SAVE
+            transactionRepository.save(creditTransaction);
+            accountRepository.save(toAccount);
+
+            //SAVE
+            clientLoanRepository.save(clientLoan);
+
+            return new ResponseEntity<>("Request Created", HttpStatus.CREATED);
         }
 
 
-        //NEW LOAN
-        ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()* 1.2, loanApplicationDTO.getPayments());// +20% TAX
-        loan.addClientLoan(clientLoan);
-        client.addClientLoan(clientLoan);
-        clientLoanRepository.save(clientLoan);
-
-        //NEW TRANSACTION
-        Transaction creditTransaction = new Transaction(TransactionType.CREDIT, loanApplicationDTO.getAmount(), "Loan  " + clientLoan.getLoan().getName() + " Approved", LocalDateTime.now());
-        transactionRepository.save(creditTransaction);
-
-
-        //MAPPING TRANSFER-ACCOUNTS
-        toAccount.addTransaction(creditTransaction);
-
-        //UPDATE BALANCE
-        toAccount.setBalance(toAccount.getBalance()+ loanApplicationDTO.getAmount());
-        accountRepository.save(toAccount);
-
-        //ADD LOAN TO CLIENT
-
-
-
-
-
-        return new ResponseEntity<>("Request Created", HttpStatus.CREATED);
-    }
 }

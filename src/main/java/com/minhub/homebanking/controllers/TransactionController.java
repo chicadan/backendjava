@@ -53,6 +53,8 @@ public class TransactionController {
 
         // CHECK CLIENT AUTH
         Client client = clientRepository.findByEmail(authentication.getName());
+        if(client == null)
+            return new ResponseEntity<>("Invalid Client",HttpStatus.NOT_FOUND);
 
         // CHECK REQUEST PARAM EMPTY
         if(amount == null || description.isBlank()|| fromAccountNumber.isBlank()|| toAccountNumber.isBlank()){
