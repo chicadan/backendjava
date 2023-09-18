@@ -51,6 +51,12 @@ public class RepositoriesTest {
         assertThat(loans, hasItem(hasProperty("name", is("Mortgage"))));
     }
 
+    @Test
+    public void existAutoLoan(){
+        List<Loan> loans = loanRepository.findAll();
+        assertThat(loans, hasItem(hasProperty("name", is("Auto Loan"))));
+    }
+
     //CLIENT
     @Test
     public void existClients(){
